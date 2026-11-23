@@ -1,0 +1,23 @@
+/* Chats: colors come from the theme variables, so every theme works. */
+@keyframes cv-rise { from { opacity: 0; translate: 0 12px; } }
+@keyframes cv-fill { from { width: 0; } }
+
+.cv-page > * { animation: cv-rise .5s cubic-bezier(.2, .7, .2, 1) backwards; }
+.cv-page > :nth-child(2) { animation-delay: 80ms; }
+
+.cv-hero { border-radius: var(--radius-card); padding: 1.25rem; }
+.cv-tile { border-radius: var(--radius-field); padding: .7rem .9rem; background: var(--chip); animation: cv-rise .5s cubic-bezier(.2, .7, .2, 1) backwards; animation-delay: calc(var(--i, 0) * 70ms + 120ms); }
+.cv-big { font-size: 1.6rem; font-weight: 800; line-height: 1.2; font-variant-numeric: tabular-nums; }
+.cv-heatwrap .hm { width: 14rem; }
+
+.cv-bar + .cv-bar { margin-top: .85rem; }
+.cv-track { height: .5rem; margin-top: .3rem; border-radius: var(--radius-pill); overflow: hidden; }
+.cv-fill { height: 100%; border-radius: var(--radius-pill); animation: cv-fill .9s cubic-bezier(.2, .7, .2, 1) backwards; animation-delay: calc(var(--i, 0) * 80ms + 250ms); }
+
+/* Rows are plain list rows: no hover lift, no press highlight. */
+.cv-open { background: none; border: 0; color: inherit; font: inherit; }
+.cv-filter { margin-top: .5rem; }
+
+@media (prefers-reduced-motion: reduce) {
+  .cv-page > *, .cv-tile, .cv-fill { animation: none; }
+}

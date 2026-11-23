@@ -1,0 +1,9 @@
+/* The Back pill, top left, mirroring the top-right group. A side rail takes the corner on a computer, so it sits to the rail's right there. */
+#back-pill { position: fixed; text-decoration: none; color: inherit; top: 1rem; left: 1rem; z-index: 30; display: flex; align-items: center; gap: .15rem; height: 3.25rem; padding: 0 1.1rem 0 .75rem; border-width: 1px; border-radius: 9999px; font-size: .9rem; font-weight: 600; transition: scale .15s, opacity .2s; }
+#back-pill[hidden] { display: none; }
+#back-pill svg { width: 1.25rem; height: 1.25rem; }
+#back-pill:active { scale: .95; }
+@media (min-width: 768px) { body:not(:has(nav[data-placement="top"])) #back-pill { left: 6rem; } }
+
+@media (min-width: 768px) { .t-dock:has(nav[data-placement="top"]) #back-pill { position: absolute; inset: 50% auto auto 1rem; translate: 0 -50%; z-index: auto; } }
+@media (max-width: 767px) { body:has(#back-pill:not([hidden])) [data-page-pane] { padding-top: 4.5rem; } }

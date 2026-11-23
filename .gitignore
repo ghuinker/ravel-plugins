@@ -1,0 +1,5 @@
+/deno.json
+/deno.lock
+/data/
+/theme/
+.DS_Store

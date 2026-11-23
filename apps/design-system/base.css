@@ -1,0 +1,261 @@
+/* Semantic colors. Pages use these classes instead of literal colors; each theme's vars.css supplies the values. */
+html { background: var(--bg); color-scheme: var(--scheme); }
+body { color: var(--ink); }
+.t-backdrop { position: fixed; inset: 0; height: 100lvh; z-index: -10; background: var(--bg); }
+.t-glow { position: fixed; inset: 0 0 auto 0; height: 18rem; z-index: -10; background: var(--glow); }
+.t-bg { background: var(--bg); color: var(--ink); }
+.t-card { background: var(--card); border-color: var(--border); }
+.t-chip { background: var(--chip); border-color: var(--border); }
+.t-nav { background: var(--nav); border-color: var(--border); }
+.t-menu { background: color-mix(in srgb, var(--card) 97%, transparent); border-color: var(--border); box-shadow: 0 12px 32px rgb(0 0 0 / .22); } /* the More popover sits inside a blurred bar, so it cannot blur the page itself: it is near-opaque instead */
+.t-input { background: var(--input); border-color: var(--border); color: var(--ink); }
+.t-input::placeholder { color: var(--muted); }
+.t-border { border-color: var(--border); }
+.t-ink { color: var(--ink); }
+.t-muted { color: var(--muted); }
+:root { --accent-text: var(--accent); }
+/* Light pages need accent text darker than the accent itself to stay readable on light cards and tints. */
+:root[data-mode=light] { --accent-text: color-mix(in oklab, var(--accent) 70%, var(--ink)); }
+.t-accent { color: var(--accent-text); }
+.t-accent-bg { background: var(--accent); color: var(--accent-ink); }
+.t-accent-grad { background: linear-gradient(135deg, var(--accent-hi), var(--accent)); color: var(--accent-ink); }
+.t-accent-tint { background: color-mix(in srgb, var(--accent) 12%, transparent); border-color: color-mix(in srgb, var(--accent) 35%, transparent); color: var(--accent-text); }
+.t-active { background: var(--active); color: var(--active-ink); }
+.t-skeleton { background: var(--skeleton); }
+.t-hover:hover { background: var(--skeleton); }
+.t-ring { --tw-ring-color: var(--card); }
+
+/* iOS-style building blocks. The corners come from the theme's --radius-card / --radius-field / --radius-pill, so a theme decides how round everything is.
+   Todo is the reference for how they fit together (see CLAUDE.md, "iOS look"). */
+/* A rounded group of rows with an inset hairline between them; set --t-inset on it to start the line after an icon or checkbox. t-group is the default and has no lines; add t-group-lined only for rows that are different kinds of controls. */
+.t-group, .t-group-lined { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-card); overflow: hidden; }
+.t-group > *, .t-group-lined > * { position: relative; border-radius: 0 !important; } /* rows are square; the group clips them to its corners, so a theme's radius on .t-chip or .t-card can't round each row */
+.t-group-lined > * + *::before { content: ""; position: absolute; z-index: 1; pointer-events: none; top: 0; right: 0; left: var(--t-inset, 1rem); border-top: 1px solid var(--border); }
+/* A plain list (no box) of rows with an inset hairline between them: set --t-inset to start the line after an icon or check circle. */
+.t-list > * { position: relative; }
+.t-list > * + *::before { content: ""; position: absolute; top: 0; right: 0; left: var(--t-inset, 0); border-top: 1px solid var(--border); }
+/* Tailwind's divide-y lines take the text color; make them the theme's border color. */
+.divide-y > * { border-color: var(--border); }
+/* A widget on the home page: a card with the theme's corner radius that, unlike t-group, leaves its children alone. */
+.t-widget:has(.kebab-btn[aria-expanded="true"]) { position: relative; z-index: 40; }
+.t-widget { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-card); }
+/* Add to a chip, button or search box to make it a capsule (or whatever the theme's pill is); the doubled class beats a theme's !important on .t-chip and .t-input. */
+.t-pill.t-pill { border-radius: var(--radius-pill) !important; }
+.t-field.t-field { border-radius: var(--radius-field) !important; }
+/* A section title above a group. */
+.t-title { font-size: 1.25rem; line-height: 1.75rem; font-weight: 700; }
+/* A round tick circle: an <input type="checkbox" class="t-check">. */
+.t-check { appearance: none; position: relative; display: grid; place-content: center; flex-shrink: 0; width: 1.5rem; height: 1.5rem; margin: 0; border: 1.5px solid var(--muted, var(--border)); border-radius: 9999px; background: transparent; transition: background 150ms, border-color 150ms; }
+/* A thumb-sized hit area around the 24px circle. */
+.t-check::before { content: ""; position: absolute; inset: -.5rem; border-radius: 9999px; }
+.t-check::after { content: ""; width: .4rem; height: .7rem; margin-top: -.12rem; border: solid var(--bg, #fff); border-width: 0 2px 2px 0; rotate: 45deg; scale: 0; transition: scale 150ms; }
+.t-check:checked { background: var(--accent); border-color: var(--accent); animation: t-check-pop 260ms ease-out; }
+.t-check:checked::after { scale: 1; }
+@keyframes t-check-pop { 0% { scale: .8; } 60% { scale: 1.12; } 100% { scale: 1; } }
+/* An iOS switch: <input type="checkbox" class="t-switch">. */
+.t-switch { appearance: none; position: relative; flex-shrink: 0; width: 3rem; height: 1.75rem; margin: 0; border: 1px solid var(--border); border-radius: 9999px; background: var(--chip); transition: background 200ms; }
+.t-switch::after { content: ""; position: absolute; top: 1px; left: 1px; width: 1.4rem; height: 1.4rem; border-radius: 9999px; background: #fff; box-shadow: 0 1px 3px rgb(0 0 0 / .35); transition: translate 200ms; }
+.t-switch:checked { background: var(--accent); }
+.t-switch:checked::after { translate: 1.2rem 0; }
+/* Slides content open: <div class="t-expand" data-class="{'is-open': ...}"><div>content</div></div>. */
+.t-expand { display: grid; grid-template-rows: 0fr; opacity: 0; transition: grid-template-rows 220ms ease, opacity 180ms ease; }
+.t-expand.is-open { grid-template-rows: 1fr; opacity: 1; }
+.t-expand > div { min-height: 0; overflow: hidden; }
+/* A translucent "liquid glass" round button (position it yourself). */
+.t-glass { color: var(--accent); background: color-mix(in srgb, var(--card) 45%, transparent); -webkit-backdrop-filter: blur(18px) saturate(180%); backdrop-filter: blur(18px) saturate(180%); border: 1px solid rgb(255 255 255 / .22); box-shadow: inset 0 1px 0 rgb(255 255 255 / .4), inset 0 -1px 0 rgb(255 255 255 / .08), 0 8px 24px rgb(0 0 0 / .3); transition: scale 120ms; }
+.t-glass:active { scale: .9; }
+@media (prefers-reduced-motion: reduce) { .t-check, .t-check::after, .t-switch, .t-switch::after, .t-expand, .t-glass { transition: none; animation: none; } }
+
+/* The web sheet (#ravel-sheet, a <dialog>) slides up from the bottom on a phone and fades in on a wide screen, and its backdrop fades. A keyframe animation, because transitions from @starting-style didn't start on this dialog. */
+@keyframes t-sheet-up { from { opacity: 0; translate: 0 100%; } }
+@keyframes t-sheet-pop { from { opacity: 0; translate: 0 1.25rem; scale: .96; } }
+@keyframes t-sheet-dim { from { background: rgb(0 0 0 / 0); } }
+/* The platform gives a sheet's size flag a min-height (medium 50vh, large 90vh). On the web a sheet is as tall as its content needs, up to 90vh, then scrolls; the flag only matters to the iOS app's detents. */
+#ravel-sheet[data-size] { min-height: 0; }
+#ravel-sheet[open] { animation: t-sheet-up .38s cubic-bezier(.2, .8, .2, 1); }
+#ravel-sheet[open]::backdrop { animation: t-sheet-dim .3s ease; }
+@media (min-width: 768px) { #ravel-sheet[open] { animation: t-sheet-pop .3s cubic-bezier(.2, .8, .2, 1); } }
+
+/* Motion. Pages add t-stagger to the element whose children should rise in one after another. */
+@keyframes t-rise { from { opacity: 0; translate: 0 14px; } }
+@keyframes t-grow { from { transform: scaleX(0); } }
+@keyframes t-drift { 50% { translate: 0 -12px; opacity: .75; } }
+@keyframes t-breathe { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 35%, transparent); } 70%, 100% { box-shadow: 0 0 0 14px transparent; } }
+.t-stagger > * { animation: t-rise .55s cubic-bezier(.2, .7, .2, 1) backwards; animation-delay: calc(var(--i, 0) * var(--stagger, 60ms)); }
+.t-stagger > :nth-child(2) { --i: 1; } .t-stagger > :nth-child(3) { --i: 2; } .t-stagger > :nth-child(4) { --i: 3; }
+.t-stagger > :nth-child(5) { --i: 4; } .t-stagger > :nth-child(6) { --i: 5; } .t-stagger > :nth-child(7) { --i: 6; }
+.t-stagger > :nth-child(8) { --i: 7; } .t-stagger > :nth-child(9) { --i: 8; }
+.t-grow { transform-origin: left; animation: t-grow .9s .25s cubic-bezier(.2, .7, .2, 1) backwards; }
+.t-glow { animation: t-drift 10s ease-in-out infinite; }
+a.t-card, a.t-chip { transition: translate .2s, box-shadow .2s; }
+a.t-card:hover, a.t-chip:hover { translate: 0 -3px; }
+/* Rows inside a group never lift on hover (a nav row is an a.t-chip, which would). */
+.t-group a.t-card:hover, .t-group a.t-chip:hover, .t-group-lined a.t-card:hover, .t-group-lined a.t-chip:hover { translate: none; }
+@media (prefers-reduced-motion: reduce) { *, ::before, ::after { animation: none !important; transition: none !important; } }
+
+/* Side nav (md+) takes 6rem on the left; only pad when centered content would run under it. */
+
+/* Smooth page changes: the browser cross-fades between pages, while the
+   backdrop and nav stay put (Chromium/Safari; others just navigate as before). */
+@view-transition { navigation: auto; }
+.t-backdrop { view-transition-name: t-backdrop; }
+nav[data-tab-bar] { view-transition-name: t-nav; } /* one element per name, or the browser skips the transition: not the .t-nav popovers and menus */
+::view-transition-group(root) { animation-duration: .4s; animation-timing-function: cubic-bezier(.2, .7, .2, 1); }
+::view-transition-old(root) { animation: 160ms cubic-bezier(.4, 0, 1, 1) both t-page-out; }
+::view-transition-new(root) { animation: 380ms 60ms cubic-bezier(.16, .84, .3, 1) both t-page-in; }
+@keyframes t-page-out { to { opacity: 0; transform: translateY(-4px) scale(.995); filter: blur(2px); } }
+@keyframes t-page-in { from { opacity: 0; transform: translateY(14px) scale(.995); filter: blur(4px); } }
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
+}
+
+/* A loading placeholder (t-loading with t-skeleton bars inside) */
+.t-loading { animation: t-loading-in .15s ease-out both; }
+.t-loading .t-skeleton { animation: t-loading-pulse 1.2s ease-in-out infinite; }
+@keyframes t-loading-in { from { opacity: 0; } }
+@keyframes t-loading-pulse { 50% { opacity: .45; } }
+
+/* Anything clickable shows the pointer, so pages never need cursor-pointer: links, buttons, form controls,
+   labels, and any element with a Datastar click handler. */
+a[href], button, summary, select, label, [role="button"], [role="tab"], [role="menuitem"], [data-on\:click],
+input:is([type="checkbox"], [type="radio"], [type="submit"], [type="button"], [type="file"], [type="range"], [type="color"]) { cursor: pointer; }
+:is(button, [role="button"], input, select):disabled, [aria-disabled="true"] { cursor: not-allowed; }
+
+/* A ui() screen with a sidebar needs more than the shell's narrow column on wide screens. */
+@media (min-width: 768px) {
+  main:has([data-ravel-sidebar]) { max-width: 72rem; padding-left: 6.5rem; /* clears the side nav */ }
+  main:has(.settings-page) { max-width: 72rem; padding-left: 6.5rem; /* Settings: same widening, clears the side nav */ }
+}
+
+/* Row actions (row-actions.ts): swipe buttons are for touch; with a mouse they never slide out on hover, and a ⋮ at the row's right edge holds the same actions. */
+.row-wrap { position: relative; }
+.row-kebab { display: none; position: absolute; right: .5rem; top: 50%; translate: 0 -50%; z-index: 2; }
+@media (hover: hover) and (pointer: fine) {
+  ravel-row .ravel-row-side { display: none !important; }
+  .row-kebab { display: block; }
+  .row-wrap .ravel-row-content { padding-right: 2.75rem; }
+}
+/* An open ⋮ menu sticks out of the group it sits in. */
+.t-group:has(.kebab-btn[aria-expanded="true"]), .t-group-lined:has(.kebab-btn[aria-expanded="true"]), .pl-section:has(.kebab-btn[aria-expanded="true"]) { overflow: visible; }
+.row-kebab:has(.kebab-btn[aria-expanded="true"]) { z-index: 40; }
+/* Each row can be its own stacking context (stagger animation), so lift the whole row while its menu is open or the next row's ⋮ paints over the popout. */
+/* Lifted above sibling rows and the floating +; the chat panel (z-50, apps/ai/index.ts) stays above this. */
+.row-wrap:has(.kebab-btn[aria-expanded="true"]), .t-stagger > :has(.kebab-btn[aria-expanded="true"]) { position: relative; z-index: 40; }
+/* With the group no longer clipping, the first and last row keep the group's rounded corners. */
+.t-group:has(.kebab-btn[aria-expanded="true"]) > :first-child .ravel-row-content, .t-group-lined:has(.kebab-btn[aria-expanded="true"]) > :first-child .ravel-row-content { border-top-left-radius: calc(var(--radius-card) - 1px); border-top-right-radius: calc(var(--radius-card) - 1px); }
+.t-group:has(.kebab-btn[aria-expanded="true"]) > :last-child .ravel-row-content, .t-group-lined:has(.kebab-btn[aria-expanded="true"]) > :last-child .ravel-row-content { border-bottom-left-radius: calc(var(--radius-card) - 1px); border-bottom-right-radius: calc(var(--radius-card) - 1px); }
+
+/* Bento: a grid of tiles of different shapes (Workouts; see CLAUDE.md, "Bento"). The app places each tile by name with
+   `grid-template-areas` on its own grid class (a phone: 4 columns, 1100px and up: 6); .bn-grid only sets the columns and the row height. */
+.bn-grid { --bn-row: 5rem; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); grid-auto-rows: var(--bn-row); gap: .7rem; }
+@media (min-width: 1100px) { .bn-grid { --bn-row: 6rem; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 1rem; } }
+.bn { --c: var(--accent); position: relative; display: flex; flex-direction: column; gap: .5rem; min-width: 0; min-height: 0; padding: .9rem; overflow: hidden;
+  border-radius: var(--radius-card); background: var(--card); border: 1px solid var(--border); color: var(--ink); text-decoration: none;
+  animation: bn-rise .6s cubic-bezier(.2, .7, .2, 1) calc(var(--i, 0) * 55ms) backwards; }
+@media (min-width: 1100px) { .bn { padding: 1.1rem; } }
+@supports (color: oklch(from red l c h)) { .bn { --c: oklch(from var(--accent) l c calc(h + var(--hue, 0))); } }
+@keyframes bn-rise { from { opacity: 0; translate: 0 14px; scale: .97; } }
+.bn-open { overflow: visible; }
+/* a card on a stage (Home; a tile with an icon, a link overlay or a back): the stage holds one card, or two that turn over */
+.bn-stage { display: block; padding: 0; overflow: visible; background: none; border: 0; perspective: 1400px; }
+.bn-stage:has(.kebab-btn[aria-expanded="true"]) { z-index: 40; }
+.bn-stage a { color: inherit; text-decoration: none; -webkit-tap-highlight-color: transparent; }
+.bn-inner { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; transition: transform .8s cubic-bezier(.3, .7, .2, 1); }
+.bn-stage.flipped .bn-inner { transform: rotateY(180deg); }
+.bn-face { position: absolute; inset: 0; display: flex; flex-direction: column; gap: .5rem; min-width: 0; padding: .9rem; border-radius: var(--radius-card); background: var(--card); color: var(--ink); border: 1px solid var(--border); backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+@media (min-width: 1100px) { .bn-face { padding: 1.1rem; } }
+.bn-back { transform: rotateY(180deg); }
+.bn-flips:not(.flipped) .bn-back, .bn-flips.flipped .bn-front { pointer-events: none; }
+.bn-flips:not(.flipped) .bn-back *, .bn-flips.flipped .bn-front * { pointer-events: none !important; }
+button.bn-link { background: none; border: 0; padding: 0; width: 100%; cursor: pointer; }
+.bn-link { position: absolute; inset: 0; border-radius: inherit; z-index: 0; -webkit-tap-highlight-color: transparent; }
+:where(.bn-face) .bn-head, :where(.bn-face) .bn-body { position: relative; pointer-events: none; }
+.bn-body a, .bn-head .bn-tools, .bn-head .bn-tools * { pointer-events: auto; }
+.bn-hico { font-size: 1rem; line-height: 1; color: var(--c); }
+.bn-tools { display: flex; align-items: center; gap: .1rem; margin-left: auto; }
+.bn-flipbtn { display: grid; place-items: center; width: 1.6rem; height: 1.6rem; border-radius: 50%; color: var(--c); opacity: .75; background: none; border: 0; padding: 0; }
+.bn-tint { background: color-mix(in srgb, var(--c) 15%, var(--card)); border-color: color-mix(in srgb, var(--c) 22%, var(--border)); }
+.bn-accent { background: var(--accent); color: var(--accent-ink); border-color: transparent; --c: var(--accent-ink); }
+.bn-invert { background: var(--ink); color: var(--bg); border-color: transparent; --c: var(--bg); }
+.bn-accent .t-muted, .bn-invert .t-muted { color: inherit; opacity: .72; }
+.bn-head { display: flex; align-items: center; gap: .4rem; min-width: 0; }
+.bn-title { margin: 0; font-size: .8rem; font-weight: 700; letter-spacing: .01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; opacity: .85; }
+.bn-count { margin-left: auto; font-size: .72rem; font-weight: 700; white-space: nowrap; color: var(--c-text, var(--c)); }
+:root[data-mode=light] .bn { --c-text: color-mix(in oklab, var(--c) 70%, var(--ink)); }
+.bn-body { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: .5rem; }
+/* a tile that is all picture (a map): no padding, the title floats on top */
+.bn-flush { padding: 0; }
+.bn-flush .bn-head { position: absolute; top: .7rem; left: .7rem; right: .7rem; z-index: 5; pointer-events: none; }
+.bn-flush .bn-title, .bn-flush .bn-count { padding: .2rem .6rem; border-radius: var(--radius-pill); background: color-mix(in srgb, var(--card) 82%, transparent); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+.bn-flush .bn-count { margin-left: auto; color: var(--ink); }
+.bn-flush .bn-body { gap: 0; }
+:where(.bn-stage) .bn-title { font-size: .95rem; }
+:where(.bn-stage) .bn-count { margin-left: 0; font-size: .8rem; }
+:where(.bn-stage) .bn-body { gap: .6rem; overflow: hidden; }
+.bn-accent .kebab-btn, .bn-invert .kebab-btn, .bn-accent .bn-flipbtn, .bn-invert .bn-flipbtn, .bn-accent .bn-hico, .bn-invert .bn-hico { color: inherit; }
+@media (prefers-reduced-motion: reduce) { .bn { animation: none; } }
+/* What goes inside a tile (shared by every bento page; each page's own .css has its area map). */
+/* numbers */
+.bn-stats { flex: 1; display: grid; grid-template-columns: repeat(var(--n, 3), minmax(0, 1fr)); gap: .5rem; align-items: center; }
+.bn-stats-col { grid-template-columns: minmax(0, 1fr); align-content: space-around; }
+.bn-sv { font-size: 1.45rem; font-weight: 800; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.bn-sl { font-size: .72rem; }
+.bn-bigline { display: flex; align-items: baseline; gap: .4rem; }
+.bn-big { font-size: 2.4rem; font-weight: 800; line-height: 1; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+@media (min-width: 1100px) { .bn-big { font-size: 3rem; } }
+
+/* charts and maps fill the tile */
+.bn-chart { flex: 1; min-height: 0; }
+.bn-chart > svg { width: 100%; height: 100%; }
+.bn-map { flex: 1; min-height: 0; border-radius: inherit; }
+
+/* rings with their legend */
+.bn-rings .bn-body { flex-direction: row; align-items: center; gap: 1rem; }
+.bn-ringbox { flex: 0 0 auto; width: min(46%, 10.5rem); }
+.bn-ringbox svg { width: 100%; height: auto; }
+.bn-legend { flex: 1; min-width: 0; margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: .8rem; font-size: .8rem; }
+.bn-legend li { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: .5rem; align-items: center; }
+.bn-legend li > b { grid-column: 2; grid-row: 1 / 3; font-size: 1.35rem; font-variant-numeric: tabular-nums; }
+
+/* short lists */
+.bn-recs { flex: 1; display: flex; flex-direction: column; justify-content: space-around; gap: .6rem; min-height: 0; overflow: hidden; }
+@media (min-width: 1100px) { .bn-cols2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .6rem 1.75rem; align-content: space-around; } }
+.bn-rec { display: flex; align-items: baseline; justify-content: space-between; gap: .6rem; min-width: 0; font-size: .85rem; color: inherit; text-decoration: none; }
+.bn-rl { display: flex; flex-direction: column; min-width: 0; }
+.bn-rt, .bn-rs { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bn-rs { font-size: .7rem; }
+.bn-rv { flex: none; font-variant-numeric: tabular-nums; }
+
+/* Pill tabs (segmented.ts): the page marks its tab with t-seg-on, or in a frame the router keeps, aria-current does. */
+.t-seg > a { color: var(--muted); }
+.t-seg > a.t-seg-on, .t-seg[data-seg-auto] > a[aria-current] { background: var(--active); color: var(--active-ink); }
+/* list() split into sections: a full-width line between them. */
+.t-list-break { border-top: 1px solid var(--border); }
+
+/* Pick-one chips (controls.ts) and a disclosure's › that turns when open. */
+.t-chips > button { background: var(--chip); color: var(--ink); }
+.t-chips > button[aria-pressed="true"] { background: var(--active); color: var(--active-ink); }
+.t-chev { flex: none; font-size: 1.4rem; line-height: 1; transition: rotate 220ms ease; }
+.t-chev.is-open { rotate: 90deg; }
+
+/* The tab bar, the same in every theme. */
+.t-nav { -webkit-backdrop-filter: blur(18px) saturate(1.3); backdrop-filter: blur(18px) saturate(1.3); }
+
+/* The tab bar across the top on a computer (a phone keeps it at the bottom): a frosted pill that scrolls away with the page, the current page a solid ink pill. Pages that left room for a side rail don't need it now. */
+@media (min-width: 768px) {
+  .t-dock { position: absolute; inset: 1rem 0 auto; z-index: 30; display: flex; align-items: center; justify-content: center; gap: .6rem; padding: 0 1rem; pointer-events: none; }
+  .t-dock > * { pointer-events: auto; }
+  nav[data-tab-bar][data-placement="top"] { position: relative; inset: auto; width: max-content; max-width: calc(100vw - 6.5rem); flex-direction: row; align-items: center; justify-content: center; gap: .2rem; padding: .3rem; border-radius: var(--radius-pill); }
+  nav[data-tab-bar][data-placement="top"] > a, nav[data-tab-bar][data-placement="top"] [data-more] { flex: none; flex-direction: row; gap: .45rem; padding: .5rem 1rem; border-radius: var(--radius-pill); font-size: .85rem; font-weight: 600; white-space: nowrap; }
+  nav[data-tab-bar][data-placement="top"] svg { width: 1.1rem; height: 1.1rem; }
+  nav[data-tab-bar][data-placement="top"] a.t-active, nav[data-tab-bar][data-placement="top"] [data-more].t-active { background: var(--ink); color: var(--bg); }
+  nav[data-tab-bar][data-placement="top"] > div { flex: none; }
+  nav[data-tab-bar][data-placement="top"] [data-show] { left: auto; right: 0; top: calc(100% + .7rem); margin: 0; }
+  nav[data-tab-bar][data-placement="top"] > a, nav[data-tab-bar][data-placement="top"] [data-more] { flex: 0 1 auto; }
+  .t-nav-clear { padding-top: 5rem; padding-left: 0 !important; }
+  main { padding-left: 1rem !important; padding-right: 1rem !important; }
+}
+@media (min-width: 768px) and (max-width: 1099px) {
+  nav[data-tab-bar][data-placement="top"] { gap: .1rem; }
+  nav[data-tab-bar][data-placement="top"] > a, nav[data-tab-bar][data-placement="top"] [data-more] { padding: .5rem .65rem; gap: .35rem; font-size: .8rem; }
+}

@@ -1,0 +1,12 @@
+/* The ⋮ menu (kebab.ts). Colors come from the theme classes on the markup. */
+@keyframes kebab-pop { from { opacity: 0; scale: .92; translate: 0 -6px; } }
+.kebab { position: relative; display: inline-block; }
+.kebab-btn { display: flex; align-items: center; justify-content: center; width: 2rem; height: 2rem; border-radius: 9999px; color: var(--accent); transition: background .15s; } /* an iOS ellipsis-in-a-circle icon button, in the accent color */
+.kebab-btn:hover { background: color-mix(in srgb, var(--accent) 16%, transparent); }
+.kebab-btn[aria-expanded="true"] { background: color-mix(in srgb, var(--accent) 22%, transparent); }
+.kebab-pop { position: absolute; right: 0; top: calc(100% + .35rem); z-index: 40; min-width: 11rem; padding: .35rem; border-radius: 1rem; border-width: 1px; backdrop-filter: blur(14px); box-shadow: 0 12px 32px rgb(0 0 0 / .35); transform-origin: top right; animation: kebab-pop .16s cubic-bezier(.2, .7, .2, 1); }
+.kebab-item { display: flex; width: 100%; align-items: center; gap: .6rem; padding: .5rem .65rem; border-radius: .7rem; font-size: .875rem; text-align: left; white-space: nowrap; }
+.kebab-item:hover { background: color-mix(in srgb, var(--accent) 16%, transparent); }
+.kebab-item.danger { color: #f87171; }
+.kebab-rule { margin: .3rem .4rem; height: 1px; background: color-mix(in srgb, currentColor 14%, transparent); }
+.kebab-label { padding: .3rem .65rem .15rem; font-size: .65rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; opacity: .55; }

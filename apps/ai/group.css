@@ -1,0 +1,11 @@
+/* The top-right group (topGroup in api.ts). It is drawn in the layout, before the chat panel slot loads, so these rules travel with it. */
+.fab-busy, body:has(ravel-chat[data-busy]) .fab-idle { display: none; }
+body:has(ravel-chat[data-busy]) .fab-busy { display: inline-block; }
+.fab-loader { display: block; width: 1.5rem; height: .8rem; color: var(--muted); }
+.fab-idle-loader { display: block; width: 1.6rem; height: 1.6rem; color: var(--muted); }
+/* The top-right group: the chat and Today buttons in one frosted pill. A phone and a side rail pin it top right; a tab bar across the top keeps it at the right end of .t-dock, which scrolls away with the page. */
+.top-group { position: fixed; top: 1rem; right: 1rem; z-index: 30; display: flex; align-items: center; gap: .1rem; padding: .25rem; border-width: 1px; border-radius: 9999px; }
+.ai-btn { display: grid; place-items: center; width: 2.75rem; height: 2.75rem; border-radius: 9999px; color: inherit; transition: scale .15s, background .2s; }
+.ai-btn:hover, .top-group .td-btn:hover { background: color-mix(in srgb, currentColor 10%, transparent); }
+.ai-btn:active { scale: .92; }
+@media (min-width: 768px) { .t-dock:has(nav[data-placement="top"]) .top-group { position: absolute; inset: 50% 1rem auto auto; translate: 0 -50%; z-index: auto; } }

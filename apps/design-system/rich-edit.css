@@ -1,0 +1,108 @@
+/* The rich editor: one block per line, styled like iOS Notes. Colors come from the theme variables. */
+.rich { position: relative; outline: none; min-height: 6rem; line-height: 1.5; white-space: pre-wrap; overflow-wrap: anywhere; caret-color: var(--accent); -webkit-user-select: text; user-select: text; }
+.rich > div { position: relative; min-height: 1.5em; }
+.rich > [data-k="h1"] { font-size: 1.6em; font-weight: 700; line-height: 1.25; margin-top: .25em; }
+.rich > [data-k="h2"] { font-size: 1.3em; font-weight: 700; line-height: 1.3; margin-top: .2em; }
+.rich > [data-k="h3"] { font-size: 1.12em; font-weight: 700; margin-top: .1em; }
+.rich strong, .rich b { font-weight: 700; }
+.rich em, .rich i { font-style: italic; }
+.rich u { text-decoration: underline; }
+.rich s, .rich strike, .rich del { text-decoration: line-through; opacity: .7; }
+.rich a { color: var(--accent); text-decoration: underline; }
+.rich code { padding: .05em .3em; border-radius: .3em; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .9em; background: var(--chip); }
+.rich[data-empty] > div:first-child::before { content: var(--rich-ph, ""); position: absolute; left: 0; color: var(--muted); pointer-events: none; }
+
+/* Lists: the marker sits in the left gutter; depth moves both. */
+.rich > [data-d="1"] { --ind: 1.5rem; }
+.rich > [data-d="2"] { --ind: 3rem; }
+.rich > [data-d="3"] { --ind: 4.5rem; }
+.rich > [data-d="4"] { --ind: 6rem; }
+.rich > [data-k="bullet"], .rich > [data-k="dash"], .rich > [data-k="num"], .rich > [data-k="check"] { padding-left: calc(var(--ind, 0rem) + 1.75rem); }
+.rich > [data-k="bullet"]::before, .rich > [data-k="dash"]::before, .rich > [data-k="num"]::before { position: absolute; left: var(--ind, 0rem); width: 1.35rem; text-align: right; font-variant-numeric: tabular-nums; }
+.rich > [data-k="bullet"]::before { content: "\2022"; }
+.rich > [data-k="dash"]::before { content: "\2013"; }
+.rich > [data-k="num"]::before { content: attr(data-n) "."; }
+.rich > [data-k="check"]::before {
+  content: "";
+  position: absolute;
+  left: calc(var(--ind, 0rem) + .1rem);
+  top: .2em;
+  box-sizing: border-box;
+  width: 1.15em;
+  height: 1.15em;
+  border: 1.5px solid var(--muted);
+  border-radius: 50%;
+  background-size: 100% 100%;
+}
+.rich > [data-k="check"][data-done]::before {
+  border-color: var(--accent);
+  background-color: var(--accent);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 12.5l4 4L18 8'/%3E%3C/svg%3E");
+}
+.rich > [data-k="check"][data-done] { color: var(--muted); }
+
+.rich > [data-k="quote"] { padding-left: .9rem; border-left: 3px solid var(--accent); color: var(--muted); }
+.rich > [data-k="mono"] { padding: 0 .75rem; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .92em; background: var(--chip); }
+.rich > :not([data-k="mono"]) + [data-k="mono"] { padding-top: .35rem; border-top-left-radius: .7rem; border-top-right-radius: .7rem; }
+.rich > [data-k="mono"]:has(+ :not([data-k="mono"])), .rich > [data-k="mono"]:last-child { padding-bottom: .35rem; border-bottom-left-radius: .7rem; border-bottom-right-radius: .7rem; }
+
+.rich > [data-k="hr"] hr { margin: .7rem 0; border: 0; border-top: 1px solid var(--border); }
+
+/* Tables scroll sideways inside the note instead of widening it. */
+.rich > [data-k="table"] { margin: .4rem 0; overflow-x: auto; -webkit-overflow-scrolling: touch; white-space: normal; }
+.rich table { border-collapse: collapse; width: 100%; }
+.rich td { min-width: 5.5rem; padding: .45rem .65rem; border: 1px solid var(--border); vertical-align: top; outline: none; overflow-wrap: anywhere; }
+.rich td:focus { box-shadow: inset 0 0 0 2px var(--accent); }
+
+/* The formatting bar above the keyboard (in the app the native bar replaces it). */
+.rich-bar {
+  position: sticky;
+  bottom: var(--rich-b, .75rem);
+  z-index: 30;
+  display: flex;
+  gap: .125rem;
+  width: fit-content;
+  max-width: 100%;
+  margin: .75rem auto 0;
+  padding: .25rem;
+  border-radius: var(--radius-pill);
+}
+@media (max-width: 767px) { .rich-bar { bottom: var(--rich-b, 6.25rem); } }
+.rich-bar button { display: flex; color: var(--accent); align-items: center; justify-content: center; min-width: 2.25rem; height: 2.25rem; padding: 0 .25rem; border-radius: var(--radius-pill); font-weight: 700; }
+.rich-bar button:active { background: color-mix(in srgb, var(--accent) 18%, transparent); }
+.rich-bar svg { width: 1.15rem; height: 1.15rem; }
+.rich-bar [data-ravel-keyboard] { flex-wrap: nowrap; gap: .125rem; }
+/* The menus open upward from the bar, since the keyboard is below it. */
+.rich-bar details > div { right: auto; left: 0; top: auto; bottom: calc(100% + .75rem); margin: 0; max-height: 60vh; overflow-y: auto; }
+.rich-bar [data-checked]:not([data-checked="false"])::after { content: "\2713"; margin-left: auto; color: var(--accent); }
+/* With a mouse the bar is not used (see rich-pop.client.ts); it stays in the page, hidden, for the app. */
+@media (hover: hover) and (min-width: 768px) { .rich-bar { position: absolute; height: 0; overflow: hidden; opacity: 0; pointer-events: none; padding: 0; } }
+/* Hidden but still in the page, so the app can read its buttons. */
+.rich-bar-off { position: absolute; height: 0; overflow: hidden; opacity: 0; pointer-events: none; padding: 0; }
+.rich-bar details > div button { justify-content: flex-start; gap: .5rem; width: 100%; color: inherit; font-weight: 500; text-align: left; }
+.rich-bar details > div button:active { background: color-mix(in srgb, var(--accent) 18%, transparent); }
+
+/* Pointer controls (rich-pop.client.ts): a layer over the editor's box with the table handles and menus. */
+.rich-layer { position: absolute; inset: 0; z-index: 30; pointer-events: none; }
+.rich-layer > * { pointer-events: auto; }
+.rich-hover { position: absolute; display: flex; align-items: center; justify-content: center; width: 1.5rem; height: 1.5rem; border-radius: 9999px; }
+.rich-more { position: absolute; }
+.rich-menu { right: auto; max-height: min(70vh, 30rem); overflow-y: auto; transform-origin: top left; }
+
+/* The format pill in the note's header row (a mouse; a phone uses the keyboard bar). */
+.rich-toolbar { display: none; }
+@media (hover: hover) and (min-width: 768px) { .rich-toolbar { display: flex; } }
+.rich-toolbar .kebab-pop { left: 0; right: auto; transform-origin: top left; max-height: 80vh; overflow-y: auto; }
+
+/* Picked cells (rich-cells.client.ts). */
+.rich td.is-picked { background: color-mix(in srgb, var(--accent) 22%, transparent); }
+.rich[data-picking] { caret-color: transparent; }
+.rich[data-picking] td::selection { background: transparent; }
+
+/* Pictures sit on their own line; a tap selects one, and ✕ or Delete removes it. */
+.rich > [data-k="img"] { margin: .4em 0; width: fit-content; max-width: 100%; border-radius: var(--radius-field, .75rem); overflow: hidden; line-height: 0; }
+.rich > [data-k="img"] img { display: block; max-width: 100%; max-height: 28rem; height: auto; border-radius: inherit; }
+.rich > [data-k="img"][data-picked] { outline: 2.5px solid var(--accent); outline-offset: 2px; }
+.rich-img-x { display: none; position: absolute; top: .4rem; right: .4rem; width: 1.75rem; height: 1.75rem; border-radius: 9999px; background: rgb(0 0 0 / .6); color: #fff; font-size: .75rem; line-height: 1; }
+.rich > [data-k="img"][data-picked] .rich-img-x { display: block; }
+.rich[data-uploading] { cursor: progress; }

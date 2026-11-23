@@ -1,0 +1,8 @@
+.settings-rail { --t-inset: 3.5rem; }
+.settings-rail a[aria-current], .settings-page:has([data-settings-home]) .settings-rail a[data-default] { background: var(--active); color: var(--active-ink); }
+/* On a phone /settings is the list of sections (iOS Settings) with nothing selected, and a section page is only its pane. */
+@media (max-width: 767px) {
+  .settings-page:has([data-settings-home]) .settings-pane { display: none; }
+  .settings-page:not(:has([data-settings-home])) .settings-rail { display: none; }
+  .settings-page:has([data-settings-home]) .settings-rail a[data-default] { background: transparent; color: inherit; }
+}

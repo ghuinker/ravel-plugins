@@ -1,0 +1,13 @@
+{
+  "ai/index.ts": 1,
+  "ai/uh-oh.client.ts": 3,
+  "chats/hero.ts": 1,
+  "chats/preview.ts": 1,
+  "settings-page/instructions.ts": 1,
+  "settings-page/memory.ts": 1,
+  "tags/ideas.ts": 2,
+  "tags/pane.ts": 1,
+  "theme/dials.ts": 2,
+  "theme/picker.ts": 1,
+  "todo/view.ts": 6
+}

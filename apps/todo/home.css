@@ -1,0 +1,11 @@
+/* The Tasks card on Home: its add field, and a task that was just added dropping in at the top. */
+.h2-addwrap .bt-add { margin: 0; }
+.bt-add { display: flex; align-items: center; gap: .5rem; flex: none; padding: .45rem .7rem; border-radius: var(--radius-field, 12px); background: color-mix(in srgb, var(--c) 10%, transparent); }
+.bt-plus { color: var(--c); font-size: 1.2rem; font-weight: 700; line-height: 1; }
+.bt-input { flex: 1; min-width: 0; background: none; border: 0; outline: none; font-size: 1rem; color: inherit; }
+.bt-input::placeholder { color: var(--muted); }
+.bt-add { cursor: text; }
+.h2-new { animation: h2-drop .45s cubic-bezier(.2, .7, .2, 1) backwards; }
+@keyframes h2-drop { from { opacity: 0; translate: 0 -14px; scale: .97; } }
+@media (prefers-reduced-motion: reduce) { .h2-new { animation: none; } }
+@media (max-width: 599px) { .h2-table:has(.h2-task) > .h2-th, .h2-table > .h2-task { grid-template-columns: 1.5rem minmax(0, 1fr) auto; } .h2-task .h2-chip { justify-self: end; } }
